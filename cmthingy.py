@@ -129,7 +129,7 @@ def format_timestamp(seconds):
     secs = int(seconds % 60)
     return f"{minutes}:{secs:02d}"
 
-def write_chapters_to_video(video_file, break_points, output_file=None, overwrite=False):
+def write_chapters_to_video(video_file, break_points, video_duration, output_file=None, overwrite=False):
     if not break_points:
         console.print("[yellow]No break points to write as chapters[/yellow]")
         return None
@@ -163,7 +163,7 @@ def write_chapters_to_video(video_file, break_points, output_file=None, overwrit
                 if i < len(break_points) - 1:
                     end_time = break_points[i + 1]['timestamp']
                 else:
-                    end_time = start_time + 999999
+                    end_time = video_duration
 
                 chapter_num = i + 2 if break_points[0]['timestamp'] > 30 else i + 1
 
@@ -425,7 +425,7 @@ def process_video_file(video_file, max_gap_minutes=12, write_chapters=False, ove
 
     if write_chapters and optimal_breaks:
         print()
-        write_chapters_to_video(video_file, optimal_breaks, overwrite=overwrite)
+        write_chapters_to_video(video_file, optimal_breaks, duration, overwrite=overwrite)
 
     return optimal_breaks
 
